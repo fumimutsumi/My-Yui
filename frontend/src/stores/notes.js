@@ -1,19 +1,26 @@
+/**
+ * Pinia Store - 笔记管理
+ */
 import { defineStore } from 'pinia'
 import { getNotes, createNote, updateNote, deleteNote, getNote, searchNotes } from '@/api/notes'
 
 export const useNotesStore = defineStore('notes', {
+  // ========== 状态 ==========
   state: () => ({
-    notes: [],
-    total: 0,
-    currentPage: 1,
-    limit: 20,
-    loading: false,
-    filters: { categoryId: null, tagId: null },
-    currentNote: null,
-    searchMode: false,
-    searchKeyword: ''
+    notes: [],                // 当前页笔记列表
+    total: 0,                 // 总记录数
+    currentPage: 1,           // 当前页码
+    limit: 20,                // 每页条数
+    loading: false,           // 加载状态
+    filters: { categoryId: null, tagId: null }, // 当前筛选条件
+    currentNote: null,        // 当前查看/编辑的笔记详情
+    searchMode: false,        // 是否处于搜索模式
+    searchKeyword: ''         // 搜索关键词
   }),
+
+  // ========== 动作 ==========
   actions: {
+    // 获取笔记列表（普通模式）
     async fetchNotes() {
       this.searchMode = false
       this.loading = true
@@ -33,6 +40,8 @@ export const useNotesStore = defineStore('notes', {
         this.loading = false
       }
     },
+
+    // 获取单条笔记详情
     async fetchNote(id) {
       try {
         const res = await getNote(id)
@@ -42,14 +51,19 @@ export const useNotesStore = defineStore('notes', {
         console.error('获取笔记详情失败', error)
       }
     },
+
+    // 添加笔记
     async addNote(note) {
       await createNote(note)
+      // 添加后根据当前模式刷新列表
       if (this.searchMode) {
         await this.searchNotes(this.searchKeyword)
       } else {
         await this.fetchNotes()
       }
     },
+
+    // 更新笔记
     async updateNote(id, note) {
       await updateNote(id, note)
       if (this.searchMode) {
@@ -58,6 +72,8 @@ export const useNotesStore = defineStore('notes', {
         await this.fetchNotes()
       }
     },
+
+    // 删除笔记
     async deleteNote(id) {
       await deleteNote(id)
       if (this.searchMode) {
@@ -66,11 +82,15 @@ export const useNotesStore = defineStore('notes', {
         await this.fetchNotes()
       }
     },
+
+    // 设置筛选条件（并自动获取）
     setFilter(filter) {
       this.filters = { ...this.filters, ...filter }
       this.currentPage = 1
       this.fetchNotes()
     },
+
+    // 搜索笔记
     async searchNotes(keyword) {
       this.loading = true
       this.searchMode = true
@@ -90,6 +110,8 @@ export const useNotesStore = defineStore('notes', {
         this.loading = false
       }
     },
+
+    // 清除搜索，返回普通列表
     clearSearch() {
       this.searchMode = false
       this.searchKeyword = ''

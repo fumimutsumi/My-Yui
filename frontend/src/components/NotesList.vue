@@ -5,8 +5,10 @@
       <button @click="createNew">+ 新建笔记</button>
     </div>
 
+    <!-- 搜索栏组件 -->
     <SearchBar />
 
+    <!-- 列表内容 -->
     <div v-if="loading">加载中...</div>
     <div v-else-if="notes.length === 0" class="empty">暂无笔记，点击新建</div>
     <ul v-else class="note-items">
@@ -24,6 +26,7 @@
             {{ tag.name }}
           </span>
         </div>
+        <!-- 操作按钮，阻止点击冒泡以免触发整行点击 -->
         <div class="actions" @click.stop>
           <button @click="editNote(note)">编辑</button>
           <button @click="deleteNote(note)">删除</button>
@@ -31,6 +34,7 @@
       </li>
     </ul>
 
+    <!-- 分页控件 -->
     <div class="pagination" v-if="totalPages > 1">
       <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">上一页</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
@@ -44,15 +48,20 @@ import { computed, onMounted, watch } from 'vue'
 import { useNotesStore } from '../stores/notes'
 import SearchBar from './SearchBar.vue'
 
+// ========== Props 定义 ==========
+// 从父组件传入的筛选条件
 const props = defineProps({
   filterCategoryId: { type: Number, default: null },
   filterTagId: { type: Number, default: null }
 })
 
+// ========== Emits 定义 ==========
 const emit = defineEmits(['view', 'edit', 'create', 'delete'])
 
+// ========== Store 实例 ==========
 const notesStore = useNotesStore()
 
+// ========== 计算属性 ==========
 const notes = computed(() => notesStore.notes)
 const total = computed(() => notesStore.total)
 const currentPage = computed(() => notesStore.currentPage)
@@ -62,6 +71,8 @@ const searchMode = computed(() => notesStore.searchMode)
 
 const totalPages = computed(() => Math.ceil(total.value / limit.value))
 
+// ========== 监听筛选条件变化 ==========
+// 当 filterCategoryId 或 filterTagId 变化时，更新 store 中的筛选条件并重新获取笔记
 watch(
   [() => props.filterCategoryId, () => props.filterTagId],
   () => {
@@ -74,12 +85,14 @@ watch(
   { immediate: true }
 )
 
+// ========== 生命周期钩子 ==========
 onMounted(() => {
   if (!searchMode.value) {
     notesStore.fetchNotes()
   }
 })
 
+// ========== 方法 ==========
 const changePage = (page) => {
   notesStore.currentPage = page
   if (searchMode.value) {
@@ -120,7 +133,6 @@ const getExcerpt = (content) => {
 </script>
 
 <style scoped>
-/* 你的原有样式，保持不变 */
 .notes-list { border: 1px solid #eee; padding: 15px; border-radius: 5px; }
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .note-items { list-style: none; padding: 0; margin: 0; }

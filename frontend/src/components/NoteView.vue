@@ -1,4 +1,5 @@
 <template>
+  <!-- 模态框背景，点击背景关闭 -->
   <div class="modal-mask" v-if="visible" @click.self="close">
     <div class="modal-container">
       <div class="modal-header">
@@ -6,22 +7,26 @@
         <button class="close-btn" @click="close">&times;</button>
       </div>
       <div class="modal-body" v-if="note">
+        <!-- 元信息 -->
         <div class="meta">
           <span>创建时间：{{ formatDate(note.created_at) }}</span>
           <span>更新时间：{{ formatDate(note.updated_at) }}</span>
         </div>
+        <!-- 分类信息 -->
         <div class="categories" v-if="note.categories?.length">
           <strong>分类：</strong>
           <span v-for="(cat, idx) in note.categories" :key="cat.id">
             {{ cat.name }}{{ idx < note.categories.length - 1 ? '、' : '' }}
           </span>
         </div>
+        <!-- 标签信息 -->
         <div class="tags" v-if="note.tags?.length">
           <strong>标签：</strong>
           <span v-for="(tag, idx) in note.tags" :key="tag.id">
             {{ tag.name }}{{ idx < note.tags.length - 1 ? '、' : '' }}
           </span>
         </div>
+        <!-- Markdown 渲染后的内容 -->
         <div class="content markdown-body" v-html="renderedContent"></div>
       </div>
       <div class="modal-footer">
@@ -35,12 +40,14 @@
 import { computed } from 'vue'
 import MarkdownIt from 'markdown-it'
 
+// ========== 初始化 Markdown 解析器 ==========
 const md = new MarkdownIt({
   html: true,        // 允许 HTML 标签
   linkify: true,     // 自动识别链接
   typographer: true  // 启用一些语言中立的替换 + 引号美化
 })
 
+// ========== Props 定义 ==========
 const props = defineProps({
   visible: Boolean,
   note: {
@@ -49,8 +56,10 @@ const props = defineProps({
   }
 })
 
+// ========== Emits 定义 ==========
 const emit = defineEmits(['close'])
 
+// ========== 方法 ==========
 const close = () => {
   emit('close')
 }
@@ -61,6 +70,7 @@ const formatDate = (dateStr) => {
   return date.toLocaleString()
 }
 
+// ========== 计算属性 ==========
 const renderedContent = computed(() => {
   if (!props.note || !props.note.content) return ''
   return md.render(props.note.content)
@@ -68,7 +78,6 @@ const renderedContent = computed(() => {
 </script>
 
 <style scoped>
-/* 模态框样式保持不变，只添加 markdown 内容区域的样式 */
 .modal-mask {
   position: fixed;
   top: 0;
@@ -142,7 +151,7 @@ const renderedContent = computed(() => {
   background-color: #3aa876;
 }
 
-/* Markdown 样式（需引入外部样式或自己定义） */
+/* Markdown 样式（基于 GitHub 风格） */
 .markdown-body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 16px;

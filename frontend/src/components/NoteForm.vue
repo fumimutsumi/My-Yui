@@ -1,4 +1,5 @@
 <template>
+  <!-- 模态框背景，点击背景关闭 -->
   <div class="modal-mask" v-if="visible" @click.self="close">
     <div class="modal-container">
       <div class="modal-header">
@@ -7,14 +8,17 @@
       </div>
       <div class="modal-body">
         <form @submit.prevent="handleSubmit">
+          <!-- 标题输入 -->
           <div class="form-group">
             <label>标题</label>
             <input type="text" v-model="form.title" required />
           </div>
+          <!-- 内容输入 -->
           <div class="form-group">
             <label>内容</label>
             <textarea v-model="form.content" rows="6" required></textarea>
           </div>
+          <!-- 分类多选（扁平化后的分类列表） -->
           <div class="form-group">
             <label>分类</label>
             <div class="checkbox-group">
@@ -30,6 +34,7 @@
               </div>
             </div>
           </div>
+          <!-- 标签多选 -->
           <div class="form-group">
             <label>标签</label>
             <div class="checkbox-group">
@@ -45,6 +50,7 @@
               </div>
             </div>
           </div>
+          <!-- 按钮区 -->
           <div class="form-actions">
             <button type="button" @click="close">取消</button>
             <button type="submit" :disabled="saving">
@@ -63,23 +69,25 @@ import { useCategoriesStore } from '../stores/categories'
 import { useTagsStore } from '../stores/tags'
 import { useNotesStore } from '../stores/notes'
 
+// ========== Props 定义 ==========
 const props = defineProps({
-  visible: Boolean,
-  note: {
+  visible: Boolean,     // 是否显示模态框
+  note: {               // 要编辑的笔记对象（新建时为 null）
     type: Object,
     default: null
   }
 })
 
+// ========== Emits 定义 ==========
 const emit = defineEmits(['close', 'saved'])
 
+// ========== Store 实例 ==========
 const categoriesStore = useCategoriesStore()
 const tagsStore = useTagsStore()
 const notesStore = useNotesStore()
 
-// 获取分类和标签数据（扁平化树？这里直接使用树结构，但选择框最好用扁平列表，方便展示）
-// 为了简化，我们直接用 store 中的树形 categories，但选择时需要遍历所有节点
-// 可以使用计算属性将树扁平化
+// ========== 计算属性 ==========
+// 将树形分类展平为列表，方便选择
 const categories = computed(() => {
   const flatten = (cats) => {
     let result = []
@@ -94,11 +102,12 @@ const categories = computed(() => {
   return flatten(categoriesStore.categories)
 })
 
+// 标签列表（已是扁平）
 const tags = computed(() => tagsStore.tags)
 
 const isEdit = computed(() => !!props.note)
 
-// 表单数据
+// ========== 表单数据 ==========
 const form = reactive({
   title: '',
   content: '',
@@ -106,7 +115,7 @@ const form = reactive({
   tagIds: []
 })
 
-// 重置表单
+// ========== 方法 ==========
 const resetForm = () => {
   form.title = ''
   form.content = ''
@@ -114,6 +123,31 @@ const resetForm = () => {
   form.tagIds = []
 }
 
+const close = () => {
+  emit('close')
+}
+
+const saving = ref(false)
+
+const handleSubmit = async () => {
+  saving.value = true
+  try {
+    if (isEdit.value) {
+      await notesStore.updateNote(props.note.id, form)
+    } else {
+      await notesStore.addNote(form)
+    }
+    emit('saved')
+    close()
+  } catch (error) {
+    console.error('保存笔记失败', error)
+    alert('保存失败，请查看控制台')
+  } finally {
+    saving.value = false
+  }
+}
+
+// ========== 侦听器 ==========
 // 当传入的 note 变化时，填充表单
 watch(
   () => props.note,
@@ -139,30 +173,6 @@ watch(
     }
   }
 )
-
-const saving = ref(false)
-
-const handleSubmit = async () => {
-  saving.value = true
-  try {
-    if (isEdit.value) {
-      await notesStore.updateNote(props.note.id, form)
-    } else {
-      await notesStore.addNote(form)
-    }
-    emit('saved')
-    close()
-  } catch (error) {
-    console.error('保存笔记失败', error)
-    alert('保存失败，请查看控制台')
-  } finally {
-    saving.value = false
-  }
-}
-
-const close = () => {
-  emit('close')
-}
 </script>
 
 <style scoped>

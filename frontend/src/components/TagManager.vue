@@ -4,6 +4,7 @@
       <h3>标签管理</h3>
       <button @click="startAdd">+ 新建标签</button>
     </div>
+    <!-- 标签列表，显示 loading 状态 -->
     <ul class="tag-list" v-if="!loading">
       <li v-for="tag in tags" :key="tag.id" class="tag-item">
         <span class="tag-name">{{ tag.name }}</span>
@@ -20,10 +21,14 @@
 import { ref, onMounted } from 'vue'
 import { useTagsStore } from '../stores/tags'
 
+// ========== Store 实例 ==========
 const tagsStore = useTagsStore()
-const tags = ref([])
-const loading = ref(false)  // 添加 loading 状态
 
+// ========== 响应式状态 ==========
+const tags = ref([])       // 标签列表数据
+const loading = ref(false) // 加载状态
+
+// ========== 生命周期钩子 ==========
 onMounted(async () => {
   loading.value = true
   await tagsStore.fetchTags()
@@ -31,6 +36,7 @@ onMounted(async () => {
   loading.value = false
 })
 
+// ========== 方法 ==========
 const startAdd = async () => {
   const name = prompt('输入新标签名称：')
   if (name) {
