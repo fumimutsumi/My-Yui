@@ -8,19 +8,26 @@ My-Yui is a personal notes knowledge base system built with Vue3 + Node.js + SQL
 
 ## Table of Contents
 
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-  - [Requirements](#requirements)
-  - [Installing Environment Tools (by OS)](#installing-environment-tools-by-os)
-  - [Clone Project and Install Dependencies](#clone-project-and-install-dependencies)
-  - [Start Development Server](#start-development-server)
-  - [Development Proxy Configuration](#development-proxy-configuration)
-- [Data Backup](#data-backup)
-- [Features & TODO](#features--todo)
-- [Configuration](#configuration)
-  - [Database Tokenizer](#database-tokenizer)
-  - [CORS & Proxy](#cors--proxy)
-- [License](#license)
+- [My-Yui Personal Notes Knowledge Base](#my-yui-personal-notes-knowledge-base)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Quick Start](#quick-start)
+    - [Requirements](#requirements)
+    - [Installing Environment Tools (by OS)](#installing-environment-tools-by-os)
+      - [macOS](#macos)
+      - [Windows](#windows)
+      - [Linux (Ubuntu/Debian)](#linux-ubuntudebian)
+    - [Clone Project and Install Dependencies](#clone-project-and-install-dependencies)
+    - [Start Development Server](#start-development-server)
+    - [Development Proxy Configuration](#development-proxy-configuration)
+  - [Data Backup](#data-backup)
+  - [Features \& TODO](#features--todo)
+    - [Completed](#completed)
+    - [TODO](#todo)
+  - [Configuration](#configuration)
+    - [Database Tokenizer](#database-tokenizer)
+    - [CORS \& Proxy](#cors--proxy)
+  - [License](#license)
 
 ---
 
@@ -29,7 +36,7 @@ My-Yui is a personal notes knowledge base system built with Vue3 + Node.js + SQL
 ```
 My-Yui/
 ├── backend/                     # Backend code
-│   ├── backups/                 # Manually backed up database files (ignored)
+│   ├── backups/                 # Manually backed up database files (ignored, auto-created by backup.js)
 │   ├── db/
 │   │   └── index.js             # Database connection and initialization
 │   ├── routes/
@@ -37,15 +44,15 @@ My-Yui/
 │   │   ├── notes.js
 │   │   └── tags.js
 │   ├── services/                # (Currently empty)
-│   ├── node_modules/            # Dependencies (ignored)
+│   ├── node_modules/            # Dependencies (ignored, auto-installed by npm install or yarn install)
 │   ├── app.js
 │   ├── server.js
-│   ├── backup.js                # Manual backup script
+│   ├── backup.js                # Manual backup script, creates backup files in backups/ directory
 │   ├── package-lock.json        
 │   └── package.json             
 ├── frontend/                    # Frontend code
 │   ├── public/                  # Static assets
-│   ├── node_modules/            # Dependencies (ignored)
+│   ├── node_modules/            # Dependencies (ignored, auto-installed by npm install or yarn install)
 │   ├── src/
 │   │   ├── api/
 │   │   │   ├── request.js
@@ -56,7 +63,6 @@ My-Yui/
 │   │   ├── components/
 │   │   │   ├── CategoryTree.vue
 │   │   │   ├── TagManager.vue
-│   │   │   ├── HelloWorld.vue   
 │   │   │   ├── NotesList.vue
 │   │   │   ├── NoteForm.vue
 │   │   │   ├── NoteView.vue
@@ -69,15 +75,13 @@ My-Yui/
 │   │   ├── main.js
 │   │   └── style.css
 │   ├── index.html
-│   ├── README.md                 # Frontend-specific documentation
 │   ├── vite.config.js
 │   ├── .gitignore                # Frontend-specific ignore file
 │   ├── package-lock.json
 │   └── package.json
-├── data.db                       # SQLite database file (ignored)
-├── data.db-shm / data.db-wal     # WAL temporary files (ignored)
-├── README.md                     # Project documentation (Chinese)
-├── README-en.md                  # Project documentation (English)
+├── data.db                       # SQLite database file (ignored, auto-created by server.js)
+├── data.db-shm / data.db-wal     # WAL temporary files (ignored, auto-created by server.js)
+├── README.md / en / ja etc.      # Project documentation
 └── .gitignore                    # Global Git ignore configuration
 ```
 

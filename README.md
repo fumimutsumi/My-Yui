@@ -36,7 +36,7 @@ My-Yui 是一个基于 Vue3 + Node.js + SQLite 的个人笔记知识库系统。
 ```
 My-Yui/
 ├── backend/                     # 后端代码
-│   ├── backups/                 # 手动备份的数据库文件（已忽略）
+│   ├── backups/                 # 手动备份的数据库文件（已忽略，运行backup.js会自动创建）
 │   ├── db/
 │   │   └── index.js             # 数据库连接与初始化
 │   ├── routes/
@@ -44,15 +44,15 @@ My-Yui/
 │   │   ├── notes.js
 │   │   └── tags.js
 │   ├── services/                # （目前为空）
-│   ├── node_modules/            # 依赖目录（已忽略）
+│   ├── node_modules/            # 依赖目录（已忽略，运行npm install或yarn install自动安装）
 │   ├── app.js
 │   ├── server.js
-│   ├── backup.js                # 手动备份脚本
+│   ├── backup.js                # 手动备份脚本，运行后会在backups/目录下创建备份文件
 │   ├── package-lock.json        
 │   └── package.json             
 ├── frontend/                    # 前端代码
 │   ├── public/                  # 静态资源
-│   ├── node_modules/            # 依赖目录（已忽略）
+│   ├── node_modules/            # 依赖目录（已忽略，运行npm install或yarn install自动安装）
 │   ├── src/
 │   │   ├── api/
 │   │   │   ├── request.js
@@ -63,7 +63,6 @@ My-Yui/
 │   │   ├── components/
 │   │   │   ├── CategoryTree.vue
 │   │   │   ├── TagManager.vue
-│   │   │   ├── HelloWorld.vue   
 │   │   │   ├── NotesList.vue
 │   │   │   ├── NoteForm.vue
 │   │   │   ├── NoteView.vue
@@ -76,14 +75,13 @@ My-Yui/
 │   │   ├── main.js
 │   │   └── style.css
 │   ├── index.html
-│   ├── README.md                 # 前端自身的说明文档
 │   ├── vite.config.js
 │   ├── .gitignore                # 前端专属忽略文件
 │   ├── package-lock.json
 │   └── package.json
-├── data.db                       # SQLite 数据库文件（已忽略）
-├── data.db-shm / data.db-wal     # WAL 临时文件（已忽略）
-├── README.md                     # 项目说明文档（当前文件）
+├── data.db                       # SQLite 数据库文件（已忽略，运行server.js会自动创建）
+├── data.db-shm / data.db-wal     # WAL 临时文件（已忽略，运行server.js会自动创建）
+├── README.md / en / ja 等        # 项目说明文档（当前文件）
 └── .gitignore                    # 全局 Git 忽略配置
 ```
 

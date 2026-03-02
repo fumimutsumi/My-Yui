@@ -36,7 +36,7 @@ My-Yui は Vue3 + Node.js + SQLite で構築された個人ノート知識ベー
 ```
 My-Yui/
 ├── backend/                     # バックエンドコード
-│   ├── backups/                 # 手動バックアップされたデータベースファイル（除外）
+│   ├── backups/                 # 手動バックアップされたデータベースファイル（除外、backup.js実行で自動作成）
 │   ├── db/
 │   │   └── index.js             # データベース接続と初期化
 │   ├── routes/
@@ -44,15 +44,15 @@ My-Yui/
 │   │   ├── notes.js
 │   │   └── tags.js
 │   ├── services/                # （現在空）
-│   ├── node_modules/            # 依存関係（除外）
+│   ├── node_modules/            # 依存関係（除外、npm installまたはyarn installで自動インストール）
 │   ├── app.js
 │   ├── server.js
-│   ├── backup.js                # 手動バックアップスクリプト
+│   ├── backup.js                # 手動バックアップスクリプト、実行するとbackups/ディレクトリにバックアップファイルを作成
 │   ├── package-lock.json        
 │   └── package.json             
 ├── frontend/                    # フロントエンドコード
 │   ├── public/                  # 静的アセット
-│   ├── node_modules/            # 依存関係（除外）
+│   ├── node_modules/            # 依存関係（除外、npm installまたはyarn installで自動インストール）
 │   ├── src/
 │   │   ├── api/
 │   │   │   ├── request.js
@@ -63,7 +63,6 @@ My-Yui/
 │   │   ├── components/
 │   │   │   ├── CategoryTree.vue
 │   │   │   ├── TagManager.vue
-│   │   │   ├── HelloWorld.vue   
 │   │   │   ├── NotesList.vue
 │   │   │   ├── NoteForm.vue
 │   │   │   ├── NoteView.vue
@@ -76,16 +75,13 @@ My-Yui/
 │   │   ├── main.js
 │   │   └── style.css
 │   ├── index.html
-│   ├── README.md                 # フロントエンド固有のドキュメント
 │   ├── vite.config.js
 │   ├── .gitignore                # フロントエンド固有の除外ファイル
 │   ├── package-lock.json
 │   └── package.json
-├── data.db                       # SQLite データベースファイル（除外）
-├── data.db-shm / data.db-wal     # WAL 一時ファイル（除外）
-├── README.md                     # プロジェクトドキュメント（中国語）
-├── README-en.md                  # プロジェクトドキュメント（英語）
-├── README-ja.md                  # プロジェクトドキュメント（日本語）
+├── data.db                       # SQLite データベースファイル（除外、server.js実行で自動作成）
+├── data.db-shm / data.db-wal     # WAL 一時ファイル（除外、server.js実行で自動作成）
+├── README.md / en / ja 等        # プロジェクトドキュメント
 └── .gitignore                    # グローバル Git 除外設定
 ```
 
